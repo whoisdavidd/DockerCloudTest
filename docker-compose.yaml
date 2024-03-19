@@ -13,7 +13,7 @@ services:
 
   odoo:
     image: odoo:16
-    command: ["--update", "all"]
+    command: odoo -d odooDB --db_host=db --db_port=5432 --db_user=odoo --db_password=odoo -i base
     depends_on:
       - db
     ports:
