@@ -1,0 +1,27 @@
+name: Docker CI/CD pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # Your other steps like building, testing, etc., can go here.
+
+      - name: Deploy to EC2 with Docker Compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_IP }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /DockerCloudTest
+            git pull origin main
+            docker-compose down
+            docker-compose up -d --build
